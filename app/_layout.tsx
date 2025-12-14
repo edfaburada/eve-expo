@@ -1,21 +1,52 @@
-import { Stack, Redirect } from "expo-router";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+// app/_layout.tsx
+import { Stack } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { supabase } from '../supabase';
 
 export default function Layout() {
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    // Get current session on mount
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession();
       setSession(data.session);
-    });
+      setLoading(false);
+    };
 
-    supabase.auth.onAuthStateChange((_event, session) => {
+    getSession();
+
+    // Listen for auth state changes (login/logout)
+    const { data: listener } = supabase.auth.onAuthStateChange(function (_event: any, session: any) {
       setSession(session);
     });
+
+    return () => listener.subscription.unsubscribe();
   }, []);
 
-  if (session === undefined) return null;
+  // While loading, render nothing (or spinner if you want)
+  if (loading) return null;
 
-  return session ? <Stack /> : <Redirect href="/login" />;
+  return (
+<Stack>
+  {!session ? (
+    <>
+      <Stack.Screen name="login" />
+      <Stack.Screen name="register" />
+    </>
+  ) : (
+    <>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="dashboard" />
+      <Stack.Screen name="notes" />
+      <Stack.Screen name="about" />
+      <Stack.Screen name="contact" />
+      <Stack.Screen name="profile" />
+      <Stack.Screen name="settings" />
+    </>
+  )}
+</Stack>
+
+  );
 }
