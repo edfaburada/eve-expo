@@ -2,9 +2,8 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
-import { supabase } from '../supabase';
-import { globalStyles } from './styles';
-
+import { supabase } from '../../supabase';
+import { globalStyles } from '../style';
 export default function Index() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
