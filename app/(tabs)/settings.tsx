@@ -1,54 +1,86 @@
-import { View, Text, TouchableOpacity, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, Switch, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { globalStyles } from './styles';
 
 export default function Settings() {
   const router = useRouter();
 
-  // Example toggles for settings
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
   return (
-    <View style={globalStyles.containerSettings}>
-      <Text style={globalStyles.title}>Settings</Text>
+    <View style={styles.containerSettings}>
+      <Text style={styles.title}>Settings</Text>
 
       {/* Dark Mode Toggle */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
-        <Text style={globalStyles.subtitle}>Dark Mode</Text>
-        <Switch
-          value={isDarkMode}
-          onValueChange={setIsDarkMode}
-        />
+      <View style={styles.row}>
+        <Text style={styles.subtitle}>Dark Mode</Text>
+        <Switch value={isDarkMode} onValueChange={setIsDarkMode} />
       </View>
 
       {/* Notifications Toggle */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
-        <Text style={globalStyles.subtitle}>Enable Notifications</Text>
+      <View style={styles.row}>
+        <Text style={styles.subtitle}>Enable Notifications</Text>
         <Switch
           value={notificationsEnabled}
           onValueChange={setNotificationsEnabled}
         />
       </View>
 
-      {/* Account Preferences Placeholder */}
-      <Text style={{ marginBottom: 20, fontSize: 16, textAlign: 'center' }}>
+      <Text style={styles.infoText}>
         Account Preferences and other settings will go here.
       </Text>
 
-      {/* App Version */}
-      <Text style={{ marginBottom: 30, fontSize: 14, color: '#888' }}>
-        App Version: 1.0.0
-      </Text>
+      <Text style={styles.versionText}>App Version: 1.0.0</Text>
 
-      {/* Go Back Home Button */}
-      <TouchableOpacity
-        style={globalStyles.button}
-        onPress={() => router.push('/')}
-      >
-        <Text style={globalStyles.buttonText}>Go Back Home</Text>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/')}>
+        <Text style={styles.buttonText}>Go Back Home</Text>
       </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  containerSettings: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 18,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  infoText: {
+    marginBottom: 20,
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  versionText: {
+    marginBottom: 30,
+    fontSize: 14,
+    color: '#888',
+    textAlign: 'center',
+  },
+  button: {
+    backgroundColor: '#4f46e5',
+    padding: 15,
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});
