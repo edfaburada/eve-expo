@@ -1,9 +1,9 @@
-// app/index.tsx
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
-import { supabase } from '../../supabase';
+import { supabase } from '@/supabase';
 import { globalStyles } from '../style';
+
 export default function Index() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -12,15 +12,12 @@ export default function Index() {
   useEffect(() => {
     const getSession = async () => {
       const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        setSession(data.session);
-      }
+      if (data.session) setSession(data.session);
       setLoading(false);
     };
 
     getSession();
 
-    // Listen for auth state changes
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
@@ -28,7 +25,6 @@ export default function Index() {
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  // Show spinner while checking session
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -37,13 +33,11 @@ export default function Index() {
     );
   }
 
-  // If no session, redirect to login
   if (!session) {
-    router.replace('./login'); // <--- TypeScript-safe
+    router.replace('/../auth/login');
     return null;
   }
 
-  // Home page after login
   return (
     <View style={globalStyles.containerHome}>
       <Text style={globalStyles.title}>Welcome Home</Text>
@@ -56,7 +50,7 @@ export default function Index() {
         <Text style={globalStyles.buttonText}>Contact</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={globalStyles.button} onPress={() => router.push('./profile')}>
+      <TouchableOpacity style={globalStyles.button} onPress={() => router.push('/profile')}>
         <Text style={globalStyles.buttonText}>Profile</Text>
       </TouchableOpacity>
 
@@ -64,7 +58,7 @@ export default function Index() {
         <Text style={globalStyles.buttonText}>Settings</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={globalStyles.button} onPress={() => router.push('./dashboard')}>
+      <TouchableOpacity style={globalStyles.button} onPress={() => router.push('/dashboard')}>
         <Text style={globalStyles.buttonText}>Dashboard</Text>
       </TouchableOpacity>
 
@@ -72,7 +66,7 @@ export default function Index() {
         style={globalStyles.button}
         onPress={async () => {
           await supabase.auth.signOut();
-          router.replace('./login'); // <--- logout to login
+          router.replace(('/../auth/login'))
         }}
       >
         <Text style={globalStyles.buttonText}>Logout</Text>

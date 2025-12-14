@@ -1,13 +1,17 @@
+import { HapticTab } from '../components/haptic-tab';
+import { IconSymbol } from '../components/ui/icon-symbol';
+import { Colors } from '../constants/theme';
+import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import React, { ReactNode } from 'react';
+import { useColorScheme } from 'react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  function HapticTab(props: BottomTabBarButtonProps): ReactNode {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <Tabs
@@ -15,7 +19,8 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
